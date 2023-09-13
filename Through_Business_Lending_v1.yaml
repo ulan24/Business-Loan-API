@@ -1,0 +1,1009 @@
+swagger: '2.0'
+info:
+  title: Business Loan API
+  description: |-
+    # Summary
+
+     API Used for Straight through Business lending.
+    ---
+  version: 1.1.1
+tags:
+  - name: Business Lending
+    description: Business Lending Experience APIs
+paths:
+  /CustomerLoan:
+    post:
+      tags:
+        - Business Lending
+      description: This API is intended for saving the Customer Loand details into DB.
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerLoanRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerLoanInfo'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /CustomerLoan/{id}:
+    get:
+      summary: Method to get Customers Loan details
+      tags:
+        - Business Lending
+      operationId: getCustomerLoanById
+      # security:
+      #   - FIP_api_key: []
+      #   - Client_api_key: []
+      description: >-
+        This API is intended for getting Customers Loan Details By Customers ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the Consent Artefact to retrieve
+          type: string
+          format: uuid
+      responses: 
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CustomerLoanResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      
+                
+definitions:
+  CustomerLoanRequest:
+    type: object
+    required:
+      - BorrowerDetails
+      - BusinessDetails
+      - Adress
+      - ProductDetails
+      - Guarantor
+      - SecurityDetails
+    xml:
+      name: CustomerLoan
+    description: This call's responsible for body request in post method
+    properties:
+      BorrowerDetails:        
+        type: object
+        required:
+          - Customer Type
+          - TIN
+          - First Name
+          - Last Name
+          - Business Legal Name
+          - Email
+          - Contact No
+          - Date of Birth
+          - Amount
+        properties:
+          Customer Type:
+            type: string
+            description: >
+              The type of customer applying for a business loan.This property indicates the classification or category of the business seeking financial assistance.
+            example: "Business"
+            enum:
+              - Business
+              - Sole Proprietor
+              
+          TIN:
+            type: string
+            description: >
+              The Tax Identification Number (TIN) is a unique identification code assigned to individuals or businesses for tax purposes.
+            pattern: "^[0-9]{9}$"
+            example: "456711899"
+                
+          First Name:
+            type: string
+            description: >
+              The first name of the individual.This holds the given name or forename of a person.
+            minLength: 1
+            maxLength: 50
+            example: "Flora"
+                
+          Middle Name:
+            type: string
+            description: >
+              The middle name of the individual. This holds the middle name or names of a person, if applicable.
+            minLength: 0
+            maxLength: 50
+            example: "Davinci"
+                
+          Last Name:
+            type: string
+            description: > 
+              The last name of the individual. This property represents the family name or surname of an individual.
+            minLength: 1
+            maxLength: 50
+            example: "Fin"
+                
+          Business Legal Name:
+            type: string
+            description: > 
+              The legal name of the business entity. This property holds the official and registered name under which the business operates.
+            minLength: 1
+            maxLength: 100
+            example: "Blooming Flowers"
+                
+          Email:
+            type: string
+            description: > 
+              The email adress of the individual or contact associated with the account. This property stores a valid email adress for communication purposes.
+            format: email
+            example: "flora@gmail.com"
+                
+          Contact No:
+            type: string
+            description: >
+              The contact number of the individual or business entity. This property stores a valid phone number for communication purposes.
+            minLength: 7
+            maxLength: 20
+            example: "34907689128"
+                
+          Date of Birth:
+            type: string
+            description: > 
+              The date of birth of the individual. This property holds the birthdate of a person.
+            format: date
+            example: "1985-07-24"
+                
+          Amount: 
+            type: number
+            description: >
+              The amount of currency associated with the borrowing transaction.
+            format: double
+            minimum: 0
+            example: 200000.00
+                
+      BusinessDetails:
+        type: object
+        description: Information about the business entity.
+        required:
+          - Established Date
+          - State Of Incorporation
+          - Number Of Employees
+          - Nature Of Business
+          - Amount
+          - NAICS Code
+        properties:
+          Established Date:
+            type: string
+            description: >
+              The date when the business entity was established or founded.
+            format: date
+            example: "2021-10-24"
+                
+          State Of Incorporation:
+            type: string
+            description: >
+              The state where the business entity is legally incorporated.
+            maxLength: 50
+            example: "Karnataka"
+                
+          Number Of Employees:
+            type: integer
+            description: > 
+              The total number of employee working for the business entity.
+            minimum: 0
+            example: 150
+          
+          Nature Of Business:
+            type: string
+            description: > 
+              A brief description of the primary nature of the business's operations.
+            maxLength: 200
+            example: "Retail"
+                
+          Amount:
+            type: number
+            description: > 
+              The amount of currency associated a financial metric (e.g., revenue, capital).
+            format: double
+            minimum: 0
+            example: 12000000.00
+            
+          NAICS Code:
+            type: string
+            description: > 
+              The North American Industry Classification System (NAICS) code associated with the business's industry.
+            # pattern: "^[0-9]{6}$"
+            example: "44-45"
+                
+      Address:
+        type: object
+        description: The physical address details.
+        required:
+          - Address Line 1
+          - City 
+          - State 
+          - Zipcode
+        properties:
+          Address Line 1:
+            type: string 
+            description: The first line of the street address.
+            maxLength: 100
+            example: "135 Valley lake dr"
+                
+          Address Line 2:
+            type: string
+            description: An optional second line of the street address.
+            maxLength: 100
+            example: "Suite 456"
+                
+          City:
+            type: string
+            description: The city or locality of the address.
+            maxLength: 50
+            example: "Atlanta"
+                
+          State:
+            type: string
+            description: The state or province of the address.
+            maxLength: 50
+            example: "California"
+                
+          Zipcode:
+            type: string
+            description: The postal code or ZIP code of the address.
+            pattern: "^[0-9]{5}(?:-[0-9]{4})?$"
+            example: "000234"
+                
+      ProductDetails:
+        type: object
+        description: Information about the loan product details.
+        required:
+          - Product Type
+          - Purpose Of Loan 
+          - Amount
+          - Business Title
+          - Number Of Terms
+        properties:
+          Product Type:
+            type: string
+            description: The type or category of the loan product.
+            example: "Start Up Business Loan"
+                
+          Purpose Of Loan: 
+            type: string
+            description: The intended purpose of the loan.
+            maxLength: 200
+            example: "Expansion/Increase Working Capital"
+                
+          Amount:
+            type: number
+            description: The loan amount associated with the product
+            format: double
+            minimum: 0
+            example: 500000.00
+          
+          Business Title:
+            type: string
+            description: The title or name of the business associated with the loan product.
+            maxLength: 100
+            example: "Flowers"
+                
+          Number Of Terms:
+            type: integer
+            description: The total number of terms or installments for the loan.
+            minimum: 1
+            example: 12
+                
+      Guarantor:
+        type: array
+        description: Information about a guarantor associated with the loan.
+        required:
+          - TIN
+          - Legal Name
+          - Guranter Type
+          - Ownership Percentage
+        minItems: 1
+        items:
+          type: object
+          properties:
+            TIN:
+              type: string
+              description: The Tax Identification Number (TIN) of the guarantor.
+              pattern: "^[0-9]{9}$"
+              example: "457623"
+                  
+            Legal Name:
+              type: string
+              description: The legal name of the guarantor.
+              maxLength: 100
+              example: "FaunaCare"
+                  
+            Guranter Type:
+              type: string
+              description: The type or role of the guarantor.
+              maxLength: 50
+              example: "Individual"
+                  
+            Ownership Percentage:
+              type: number
+              description: The percentage of ownership the guarantor holds in the business.
+              format: double
+              minimum: 0
+              maximum: 100
+              example: 33.3
+              
+      SecurityDetails:
+        type: array
+        required:
+          - Collateral Type
+          - Collateral Details
+          - Amount 
+        minItems: 1
+        items:
+          type: object
+          properties:
+            Collateral Type:
+              type: string
+              description: The type or category of the collateral.
+              maxLength: 50
+              example: "Real Estate"
+                  
+            Collateral Details:
+              type: string
+              description: Additional information about the collateral.
+              example: "Shares"
+                  
+            Amount:
+              type: number
+              description: The estimated value or amount of the collateral.
+              format: double
+              minimum: 0
+              example: 450000.00
+  CustomerLoanInfo:
+    type: object
+    required:
+      - BorrowerDetails
+      - BusinessDetails
+      - Adress
+      - ProductDetails
+      - Guarantor
+      - SecurityDetails
+    xml:
+      name: CustomerLoan
+    description: This call's responsible for body request in post method
+    properties:
+      BorrowerDetails:        
+        type: object
+        required:
+          - Customer Type
+          - TIN
+          - First Name
+          - Last Name
+          - Business Legal Name
+          - Email
+          - Contact No
+          - Date of Birth
+          - Amount
+        properties:
+          Customer Type:
+            type: string
+            description: >
+              The type of customer applying for a business loan.This property indicates the classification or category of the business seeking financial assistance.
+            example: "Business"
+            enum:
+              - Business
+              - Sole Proprietor
+              
+          TIN:
+            type: string
+            description: >
+              The Tax Identification Number (TIN) is a unique identification code assigned to individuals or businesses for tax purposes.
+            pattern: "^[0-9]{9}$"
+            example: "456711899"
+                
+          First Name:
+            type: string
+            description: >
+              The first name of the individual.This holds the given name or forename of a person.
+            minLength: 1
+            maxLength: 50
+            example: "Flora"
+                
+          Middle Name:
+            type: string
+            description: >
+              The middle name of the individual. This holds the middle name or names of a person, if applicable.
+            minLength: 0
+            maxLength: 50
+            example: "Davinci"
+                
+          Last Name:
+            type: string
+            description: > 
+              The last name of the individual. This property represents the family name or surname of an individual.
+            minLength: 1
+            maxLength: 50
+            example: "Fin"
+                
+          Business Legal Name:
+            type: string
+            description: > 
+              The legal name of the business entity. This property holds the official and registered name under which the business operates.
+            minLength: 1
+            maxLength: 100
+            example: "Blooming Flowers"
+                
+          Email:
+            type: string
+            description: > 
+              The email adress of the individual or contact associated with the account. This property stores a valid email adress for communication purposes.
+            format: email
+            example: "flora@gmail.com"
+                
+          Contact No:
+            type: string
+            description: >
+              The contact number of the individual or business entity. This property stores a valid phone number for communication purposes.
+            minLength: 7
+            maxLength: 20
+            example: "34907689128"
+                
+          Date of Birth:
+            type: string
+            description: > 
+              The date of birth of the individual. This property holds the birthdate of a person.
+            format: date
+            example: "1985-07-24"
+                
+          Amount: 
+            type: number
+            description: >
+              The amount of currency associated with the borrowing transaction.
+            format: double
+            minimum: 0
+            example: 200000.00
+                
+      BusinessDetails:
+        type: object
+        description: Information about the business entity.
+        required:
+          - Established Date
+          - State Of Incorporation
+          - Number Of Employees
+          - Nature Of Business
+          - Amount
+          - NAICS Code
+        properties:
+          Established Date:
+            type: string
+            description: >
+              The date when the business entity was established or founded.
+            format: date
+            example: "2021-10-24"
+                
+          State Of Incorporation:
+            type: string
+            description: >
+              The state where the business entity is legally incorporated.
+            maxLength: 50
+            example: "Karnataka"
+                
+          Number Of Employees:
+            type: integer
+            description: > 
+              The total number of employee working for the business entity.
+            minimum: 0
+            example: 150
+          
+          Nature Of Business:
+            type: string
+            description: > 
+              A brief description of the primary nature of the business's operations.
+            maxLength: 200
+            example: "Retail"
+                
+          Amount:
+            type: number
+            description: > 
+              The amount of currency associated a financial metric (e.g., revenue, capital).
+            format: double
+            minimum: 0
+            example: 12000000.00
+            
+          NAICS Code:
+            type: string
+            description: > 
+              The North American Industry Classification System (NAICS) code associated with the business's industry.
+            # pattern: "^[0-9]{6}$"
+            example: "44-45"
+                
+      Address:
+        type: object
+        description: The physical address details.
+        required:
+          - Address Line 1
+          - City 
+          - State 
+          - Zipcode
+        properties:
+          Address Line 1:
+            type: string 
+            description: The first line of the street address.
+            maxLength: 100
+            example: "135 Valley lake dr"
+                
+          Address Line 2:
+            type: string
+            description: An optional second line of the street address.
+            maxLength: 100
+            example: "Suite 456"
+                
+          City:
+            type: string
+            description: The city or locality of the address.
+            maxLength: 50
+            example: "Atlanta"
+                
+          State:
+            type: string
+            description: The state or province of the address.
+            maxLength: 50
+            example: "California"
+                
+          Zipcode:
+            type: string
+            description: The postal code or ZIP code of the address.
+            pattern: "^[0-9]{5}(?:-[0-9]{4})?$"
+            example: "000234"
+                
+      ProductDetails:
+        type: object
+        description: Information about the loan product details.
+        required:
+          - Product Type
+          - Purpose Of Loan 
+          - Amount
+          - Business Title
+          - Number Of Terms
+        properties:
+          Product Type:
+            type: string
+            description: The type or category of the loan product.
+            example: "Start Up Business Loan"
+                
+          Purpose Of Loan: 
+            type: string
+            description: The intended purpose of the loan.
+            maxLength: 200
+            example: "Expansion/Increase Working Capital"
+                
+          Amount:
+            type: number
+            description: The loan amount associated with the product
+            format: double
+            minimum: 0
+            example: 500000.00
+          
+          Business Title:
+            type: string
+            description: The title or name of the business associated with the loan product.
+            maxLength: 100
+            example: "Flowers"
+                
+          Number Of Terms:
+            type: integer
+            description: The total number of terms or installments for the loan.
+            minimum: 1
+            example: 12
+                
+      Guarantor:
+        type: array
+        description: Information about a guarantor associated with the loan.
+        required:
+          - TIN
+          - Legal Name
+          - Guranter Type
+          - Ownership Percentage
+        minItems: 1
+        items:
+          type: object
+          properties:
+            TIN:
+              type: string
+              description: The Tax Identification Number (TIN) of the guarantor.
+              pattern: "^[0-9]{9}$"
+              example: "457623"
+                  
+            Legal Name:
+              type: string
+              description: The legal name of the guarantor.
+              maxLength: 100
+              example: "FaunaCare"
+                  
+            Guranter Type:
+              type: string
+              description: The type or role of the guarantor.
+              maxLength: 50
+              example: "Individual"
+                  
+            Ownership Percentage:
+              type: number
+              description: The percentage of ownership the guarantor holds in the business.
+              format: double
+              minimum: 0
+              maximum: 100
+              example: 33.3
+              
+      SecurityDetails:
+        type: array
+        required:
+          - Collateral Type
+          - Collateral Details
+          - Amount 
+        minItems: 1
+        items:
+          type: object
+          properties:
+            Collateral Type:
+              type: string
+              description: The type or category of the collateral.
+              maxLength: 50
+              example: "Real Estate"
+                  
+            Collateral Details:
+              type: string
+              description: Additional information about the collateral.
+              example: "Shares"
+                  
+            Amount:
+              type: number
+              description: The estimated value or amount of the collateral.
+              format: double
+              minimum: 0
+              example: 450000.00
+  CustomerLoanResponse:
+    type: object
+    required:
+      - ver
+      - status
+      - createTimestamp
+      - BorrowerDetails
+      - BusinessDetails
+      - Adress
+      - ProductDetails
+      - Guarantor
+      - SecurityDetails
+    properties:
+      ver:
+        type: string
+        example: '1.0'
+        description: Version of the AA Ecosystem API's
+        xml:
+          attribute: true
+      # id:
+      #   type: string
+      #   description: >-
+      #     The unique transaction identifier used for providing an end to end
+      #     traceability. 
+      #   example: "3fe4f4b4-8797-4a83-9caf-e28cfcb7aca5"
+      #   xml:
+      #     attribute: true
+      status:
+        type: string
+        description: Current status of Method
+        enum:
+          - ACTIVE
+          - PAUSED
+          - REVOKED
+          - EXPIRED
+      createTimestamp:
+        type: string
+        format: date-time
+        example: '2023-08-06T1:37:57.153Z'
+        description: Creation time of the CustomerLoanInfo artefact
+        xml:
+          attribute: true
+      BorrowerDetails:        
+        type: object
+        required:
+          - Customer Type
+          - TIN
+          - First Name
+          - Last Name
+          - Business Legal Name
+          - Email
+          - Contact No
+          - Date of Birth
+          - Amount
+        properties:
+          Customer Type:
+            type: string
+            description: >
+              The type of customer applying for a business loan.This property indicates the classification or category of the business seeking financial assistance.
+            example: "Business"
+            enum:
+              - Business
+              - Sole Proprietor
+              
+          TIN:
+            type: string
+            description: >
+              The Tax Identification Number (TIN) is a unique identification code assigned to individuals or businesses for tax purposes.
+            pattern: "^[0-9]{9}$"
+            example: "456711899"
+                
+          First Name:
+            type: string
+            description: >
+              The first name of the individual.This holds the given name or forename of a person.
+            minLength: 1
+            maxLength: 50
+            example: "Flora"
+                
+          Middle Name:
+            type: string
+            description: >
+              The middle name of the individual. This holds the middle name or names of a person, if applicable.
+            minLength: 0
+            maxLength: 50
+            example: "Davinci"
+                
+          Last Name:
+            type: string
+            description: > 
+              The last name of the individual. This property represents the family name or surname of an individual.
+            minLength: 1
+            maxLength: 50
+            example: "Fin"
+                
+          Business Legal Name:
+            type: string
+            description: > 
+              The legal name of the business entity. This property holds the official and registered name under which the business operates.
+            minLength: 1
+            maxLength: 100
+            example: "Blooming Flowers"
+                
+          Email:
+            type: string
+            description: > 
+              The email adress of the individual or contact associated with the account. This property stores a valid email adress for communication purposes.
+            format: email
+            example: "flora@gmail.com"
+                
+          Contact No:
+            type: string
+            description: >
+              The contact number of the individual or business entity. This property stores a valid phone number for communication purposes.
+            minLength: 7
+            maxLength: 20
+            example: "34907689128"
+                
+          Date of Birth:
+            type: string
+            description: > 
+              The date of birth of the individual. This property holds the birthdate of a person.
+            format: date
+            example: "1985-07-24"
+                
+          Amount: 
+            type: number
+            description: >
+              The amount of currency associated with the borrowing transaction.
+            format: double
+            minimum: 0
+            example: 200000.00
+                
+      BusinessDetails:
+        type: object
+        description: Information about the business entity.
+        required:
+          - Established Date
+          - State Of Incorporation
+          - Number Of Employees
+          - Nature Of Business
+          - Amount
+          - NAICS Code
+        properties:
+          Established Date:
+            type: string
+            description: >
+              The date when the business entity was established or founded.
+            format: date
+            example: "2021-10-24"
+                
+          State Of Incorporation:
+            type: string
+            description: >
+              The state where the business entity is legally incorporated.
+            maxLength: 50
+            example: "Karnataka"
+                
+          Number Of Employees:
+            type: integer
+            description: > 
+              The total number of employee working for the business entity.
+            minimum: 0
+            example: 150
+          
+          Nature Of Business:
+            type: string
+            description: > 
+              A brief description of the primary nature of the business's operations.
+            maxLength: 200
+            example: "Retail"
+                
+          Amount:
+            type: number
+            description: > 
+              The amount of currency associated a financial metric (e.g., revenue, capital).
+            format: double
+            minimum: 0
+            example: 12000000.00
+            
+          NAICS Code:
+            type: string
+            description: > 
+              The North American Industry Classification System (NAICS) code associated with the business's industry.
+            # pattern: "^[0-9]{6}$"
+            example: "44-45"
+                
+      Address:
+        type: object
+        description: The physical address details.
+        required:
+          - Address Line 1
+          - City 
+          - State 
+          - Zipcode
+        properties:
+          Address Line 1:
+            type: string 
+            description: The first line of the street address.
+            maxLength: 100
+            example: "135 Valley lake dr"
+                
+          Address Line 2:
+            type: string
+            description: An optional second line of the street address.
+            maxLength: 100
+            example: "Suite 456"
+                
+          City:
+            type: string
+            description: The city or locality of the address.
+            maxLength: 50
+            example: "Atlanta"
+                
+          State:
+            type: string
+            description: The state or province of the address.
+            maxLength: 50
+            example: "California"
+                
+          Zipcode:
+            type: string
+            description: The postal code or ZIP code of the address.
+            pattern: "^[0-9]{5}(?:-[0-9]{4})?$"
+            example: "000234"
+                
+      ProductDetails:
+        type: object
+        description: Information about the loan product details.
+        required:
+          - Product Type
+          - Purpose Of Loan 
+          - Amount
+          - Business Title
+          - Number Of Terms
+        properties:
+          Product Type:
+            type: string
+            description: The type or category of the loan product.
+            example: "Start Up Business Loan"
+                
+          Purpose Of Loan: 
+            type: string
+            description: The intended purpose of the loan.
+            maxLength: 200
+            example: "Expansion/Increase Working Capital"
+                
+          Amount:
+            type: number
+            description: The loan amount associated with the product
+            format: double
+            minimum: 0
+            example: 500000.00
+          
+          Business Title:
+            type: string
+            description: The title or name of the business associated with the loan product.
+            maxLength: 100
+            example: "Flowers"
+                
+          Number Of Terms:
+            type: integer
+            description: The total number of terms or installments for the loan.
+            minimum: 1
+            example: 12
+                
+      Guarantor:
+        type: array
+        description: Information about a guarantor associated with the loan.
+        required:
+          - TIN
+          - Legal Name
+          - Guranter Type
+          - Ownership Percentage
+        minItems: 1
+        items:
+          type: object
+          properties:
+            TIN:
+              type: string
+              description: The Tax Identification Number (TIN) of the guarantor.
+              pattern: "^[0-9]{9}$"
+              example: "457623"
+                  
+            Legal Name:
+              type: string
+              description: The legal name of the guarantor.
+              maxLength: 100
+              example: "FaunaCare"
+                  
+            Guranter Type:
+              type: string
+              description: The type or role of the guarantor.
+              maxLength: 50
+              example: "Individual"
+                  
+            Ownership Percentage:
+              type: number
+              description: The percentage of ownership the guarantor holds in the business.
+              format: double
+              minimum: 0 
+              maximum: 100
+              example: 33.3
+              
+      SecurityDetails:
+        type: array
+        required:
+          - Collateral Type
+          - Collateral Details
+          - Amount 
+        minItems: 1
+        items:
+          type: object
+          properties:
+            Collateral Type:
+              type: string
+              description: The type or category of the collateral.
+              maxLength: 50
+              example: "Real Estate"
+                  
+            Collateral Details:
+              type: string
+              description: Additional information about the collateral.
+              example: "Shares"
+                  
+            Amount:
+              type: number
+              description: The estimated value or amount of the collateral.
+              format: double
+              minimum: 0
+              example: 450000.00
+      
+  
+      
