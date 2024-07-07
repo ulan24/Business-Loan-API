@@ -25,7 +25,7 @@ Before you begin, ensure you have the following installed:
    ```bash
    mvn spring-boot:run
 
-The API server will start running at `http://localhost:8080`.
+The API server will start running at `http://localhost:1000`.
 
 ## Dependencies
 
@@ -121,11 +121,58 @@ Example response:
 
 ```json
 {
-  "applicationId": "123456789",
-  "status": "pending",
-  "amount": 10000,
-  "applicantName": "John Doe",
-  "businessName": "ABC Inc."
+    "ver": "1.0",
+    "status": "active",
+    "createTimestamp": "2024-07-08 01:35:26.354054",
+    "BorrowerDetails": {
+        "Customer Type": "Business",
+        "TIN": "456711899",
+        "First Name": "Flora",
+        "Middle Name": "Davinci",
+        "Last Name": "Fin",
+        "Business Legal Name": "Blooming Flowers",
+        "Email": "flora@gmail.com",
+        "Contact No": "34907689128",
+        "Date of Birth": "1985-07-24",
+        "Amount": 200000.00
+    },
+    "BusinessDetails": {
+        "Established Date": "2021-10-24",
+        "State Of Incorporation": "Karnataka",
+        "Number Of Employees": 150,
+        "Nature Of Business": "Retail",
+        "Amount": 12000000.00,
+        "NAICS Code": "44-45"
+    },
+    "Address": {
+        "Address Line 1": "135 Valley lake dr",
+        "Address Line 2": "Suite 456",
+        "City": "Atlanta",
+        "State": "California",
+        "Zipcode": "000234"
+    },
+    "ProductDetails": {
+        "Product Type": "Start Up Business Loan",
+        "Purpose Of Loan": "Expansion/Increase Working Capital",
+        "Amount": 500000.00,
+        "Business Title": "Flowers",
+        "Number Of Terms": 12
+    },
+    "Guarantor": [
+        {
+            "TIN": "457623",
+            "Legal Name": "FaunaCare",
+            "Guranter Type": "Individual",
+            "Ownership Percentage": 33.3
+        }
+    ],
+    "SecurityDetails": [
+        {
+            "Collateral Type": "Real Estate",
+            "Collateral Details": "Shares",
+            "Amount": 450000.00
+        }
+    ]
 }
 ```
 
