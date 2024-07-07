@@ -188,3 +188,10 @@ To run tests, use the following command:
 ```bash
    mvn test
 ```
+
+## Learn More
+
+- [Spring Boot Documentation](https://docs.spring.io/spring-boot)
+- [Spring Framework Documentation](https://docs.spring.io/spring-framework/reference)
+- [Java Development Kit (JDK) Documentation](https://docs.oracle.com/en/java/javase/17)
+- [Maven Documentation](https://maven.apache.org/guides/index.html)
